@@ -9,6 +9,7 @@
       "outDir": "dist",
       "assets": [
         "assets",
+        "channel.html",
         "favicon.ico"
       ],
       "index": "index.html",
@@ -19,11 +20,11 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "../node_modules/material-design-lite/dist/material.css",
+        "../node_modules/material-design-lite/dist/material.min.css",
         "styles.css"
       ],
       "scripts": [
-        "../node_modules/material-design-lite/dist/material.js"
+        "../node_modules/material-design-lite/dist/material.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
