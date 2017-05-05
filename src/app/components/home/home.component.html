@@ -1,0 +1,23 @@
+<div class="mdl-layout__container">
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title">
+          <a href="/">WeatherMood</a>
+        </span>
+        <div class="mdl-layout-spacer"></div>
+        <span class="mdl-spinner mdl-js-spinner" [ngClass]="{'is-active': loading}"></span>
+      </div>
+      <weather></weather>
+    </header>
+    <main class="mdl-layout__content">
+      <div class="mdl-js-snackbar mdl-snackbar">
+        <div class="mdl-snackbar__text"></div>
+        <button class="mdl-snackbar__action" type="button"></button>
+      </div>
+      <div class="mdl-grid">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>

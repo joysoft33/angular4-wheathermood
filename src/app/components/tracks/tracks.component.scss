@@ -1,0 +1,49 @@
+#tracks {
+  header {
+    background-color: white;
+    box-shadow: none;
+    color: #333;
+    padding: 10px;
+    margin-bottom: 15px;
+    .mdl-grid {
+      margin-left: 0;
+      .buttons {
+        margin-right: 30px;
+      }
+      .infos {
+        vertical-align: middle;
+        line-height: 3em;
+        span:first-child {
+          font-size: 1.2em;
+        }
+      }
+    }
+  }
+  ul>li {
+    border-top: 1px solid #ccc;
+    list-style: none;
+    padding: 10px;
+    &.active {
+      background-color: #eee;
+    }
+    &:hover {
+      background-color: #ddd;
+      cursor: pointer;
+    }
+    div {
+      display: inline-block;
+      margin: 10px;
+    }
+    .mdl-list__item-primary-content,
+    .mdl-list__item-text-body {
+      height: auto;
+    }
+    button {
+      margin: 10px;
+      float: right;
+      &.hidden {
+        visibility: hidden;
+      }
+    }
+  }
+}

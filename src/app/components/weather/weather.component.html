@@ -1,0 +1,24 @@
+<div id="weather">
+  <div class="mdl-grid">
+    <div class="input">
+      <form #form="ngForm" (ngSubmit)="getWeather(form)">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <input class="mdl-textfield__input" type="text" id="query" name="query" ngModel />
+          <label class="mdl-textfield__label" for="query">Enter city name</label>
+        </div>
+      </form>
+    </div>
+    <div class="infos">
+      <div class="mdl-grid">
+        <div *ngIf="info" class="picture">
+          <img [src]="info.icon" />
+        </div>
+        <div *ngIf="info" class="values">
+          <div>{{info.name}}</div>
+          <div>{{info.description}}</div>
+          <div>{{info.temperature}} °C</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -2,19 +2,45 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+
+import {
+  HomeComponent,
+  PlaylistsComponent,
+  TracksComponent,
+  WeatherComponent,
+  Error404Component,
+  EmptyComponent } from './components';
+
+import {
+  DeezerService,
+  WeatherService,
+  EventsService } from './services';
 
 @NgModule({
   declarations: [
-    AppComponent
+    HomeComponent,
+    PlaylistsComponent,
+    TracksComponent,
+    WeatherComponent,
+    Error404Component,
+    EmptyComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    BrowserAnimationsModule,
+    AppRoutingModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    WeatherService,
+    DeezerService,
+    EventsService    
+  ],
+  bootstrap: [HomeComponent]
 })
 export class AppModule { }

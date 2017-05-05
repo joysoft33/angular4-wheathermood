@@ -1,0 +1,18 @@
+<div *ngIf="playlists" id="playlists" class="">
+  <div class="playlist mdl-card mdl-shadow--2dp" *ngFor="let p of playlists; trackBy: trackById">
+    <div class="mdl-card__media">
+      <img [src]="p.pictureUrl" />
+    </div>
+    <div class="mdl-card__title">
+      <span class="mdl-card__title-text">{{p.title}}</span>
+    </div>
+    <div class="mdl-card__supporting-text">
+      {{p.tracksCount}} tracks
+    </div>
+    <div class="mdl-card__actions">
+      <button class="mdl-button mdl-js-button" (click)="playTracks(p.id)">
+        Play
+      </button>
+    </div>
+  </div>
+</div>

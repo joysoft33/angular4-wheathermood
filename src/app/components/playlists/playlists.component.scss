@@ -1,0 +1,32 @@
+#playlists {
+  padding-bottom: 10px;
+  .playlist {
+    display: inline-flex;
+    margin: 10px;
+    max-width: 250px;
+    .card-image img {
+      width: 100%;
+    }
+    .card-caption {
+      padding: 5px;
+    }
+    .mdl-card__title {
+      padding: 5px 5px 0 5px;
+      .mdl-card__title-text {
+        font-size: 1.2em;
+        text-transform: lowercase;
+        white-space: nowrap;
+        overflow: hidden;
+        display: block;
+        &::first-letter {
+          text-transform: uppercase;
+        }
+      }
+    }
+    .mdl-card__supporting-text {
+      padding: 0 5px;
+      font-size: 80%;
+      line-height: 1em;
+    }
+  }
+}
