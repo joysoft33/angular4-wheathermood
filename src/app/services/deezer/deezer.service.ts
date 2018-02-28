@@ -21,6 +21,8 @@ const EVENTS = [
   'player_play'
 ];
 
+interface Window { dzAsyncInit: any };
+declare var window: Window;
 declare var DZ: any;
 
 @Injectable()
