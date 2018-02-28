@@ -20,7 +20,7 @@ export class WeatherService {
    */
   get = (city: string): Observable<WeatherInfo> => {
 
-    console.debug(LOGNS, `requesting ${city} weather`);
+    console.log(LOGNS, `requesting ${city} weather`);
 
     return this.http.get(API_URL + city + "&APPID=" + API_KEY)
 
@@ -36,7 +36,7 @@ export class WeatherService {
           icon: `http://openweathermap.org/img/w/${body.weather[0].icon}.png`
         };
 
-        console.debug(LOGNS, city, 'weather is', info.meteo);
+        console.log(LOGNS, city, 'weather is', info.meteo);
         return info;
       })
       .catch((error: any) => {

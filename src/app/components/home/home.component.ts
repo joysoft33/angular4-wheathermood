@@ -1,6 +1,7 @@
-import { Component, NgZone, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { Subscription } from 'rxjs/Subscription';
 
 import { 
   EventsService,
@@ -19,10 +20,9 @@ import {
 export class HomeComponent {
 
   subscription: Subscription;
-  loading: boolean;
+  loading: boolean = false;
 
   constructor(
-    private zone: NgZone,
     private router: Router,
     private events: EventsService
   ) {
@@ -30,7 +30,6 @@ export class HomeComponent {
 
   ngOnInit() {
     this.subscription = this.events.events$.subscribe(this.onEvent);
-    this.loading = false;
   }
 
   ngOnDestroy() {
@@ -53,16 +52,16 @@ export class HomeComponent {
     } else if (event instanceof LoadEvent) {
       this.showLoading(event.value);
     } else {
-      console.log('Event unknown');
+      console.log('Unknown event');
     }
   };
 
   showLoading = (show: boolean): void => {
-    this.zone.run(() => this.loading = show);
+    setTimeout(() => this.loading = show, 0);
   };
 
   showToast = (message: string): void => {
-    var snackbarContainer: any = document.querySelector('.mdl-snackbar');
+    const snackbarContainer: any = document.querySelector('.mdl-snackbar');
     if (snackbarContainer && snackbarContainer.MaterialSnackbar) {
       snackbarContainer.MaterialSnackbar.showSnackbar({
         message: message
