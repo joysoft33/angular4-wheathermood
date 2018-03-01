@@ -2,6 +2,8 @@ import { Component, NgZone, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
+import 'rxjs/add/operator/first';
+
 import { DeezerService, Track } from '../../services/deezer';
 
 import {
@@ -12,7 +14,8 @@ import {
   TrackPlayEvent,
   StopEvent,
   LoadEvent,
-  ToastEvent } from '../../services/events';
+  ToastEvent
+} from '../../services/events';
 
 @Component({
   selector: 'tracks',
@@ -43,21 +46,16 @@ export class TracksComponent implements OnInit, OnDestroy {
     this.subscription = this.deezer.events$.subscribe((event) => this.onPlayEvent(event));
     // Get the requested playlist tracks
     this.events.emit(new LoadEvent(true));
-
-    this.route.params
-      .switchMap(
-        (params: Params) => {
-          this.playlistId = +params['id'];
-          return this.deezer.playlistPlay(this.playlistId);
-        }
-      )
-      .subscribe(
-        (tracks) => {
-          this.zone.run(() => this.tracks = tracks);
-          this.events.emit(new LoadEvent(false));
-        },
-        (err) => this.events.emit(new ToastEvent(err))
-      );
+    this.deezer
+      .playlistPlay(+(this.route.snapshot.paramMap.get('id')))
+      .first()
+      .subscribe((tracks) => {
+        this.zone.run(() => this.tracks = tracks);
+      }, (err) => {
+        this.events.emit(new ToastEvent(err));
+      }, () => {
+        this.events.emit(new LoadEvent(false));
+      });
   }
 
   ngOnDestroy() {
@@ -77,14 +75,15 @@ export class TracksComponent implements OnInit, OnDestroy {
    * Start playing the requested playlist's track
    */
   trackPlay = (index: number): void => {
-
     this.events.emit(new LoadEvent(true));
-
     this.deezer.playlistPlay(this.playlistId, index)
-      .subscribe(
-        (data) => this.events.emit(new LoadEvent(false)),
-        (err) => this.events.emit(new ToastEvent(err))
-      );
+      .subscribe((data): void => {
+        console.log(data);
+      }, (err): void => {
+        this.events.emit(new ToastEvent(err));
+      }, (): void => {
+        this.events.emit(new LoadEvent(false));
+      });
   };
 
   /**
@@ -106,10 +105,8 @@ export class TracksComponent implements OnInit, OnDestroy {
    * Process Deezer service notifications
    */
   onPlayEvent = (event: AppEvent): void => {
-
     console.log("Deezer event:", event.type);
-
-    this.zone.run(() => {
+    this.zone.run((): void => {
       if (event instanceof TrackNewEvent) {
         console.log("Playing", event.value.title);
         this.currentTrack = event.value;

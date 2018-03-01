@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule  } from './app-routing.module';
 
 import {
   HomeComponent,
@@ -13,12 +13,14 @@ import {
   TracksComponent,
   WeatherComponent,
   Error404Component,
-  EmptyComponent } from './components';
+  EmptyComponent
+} from './components';
 
 import {
   DeezerService,
   WeatherService,
-  EventsService } from './services';
+  EventsService
+} from './services';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,7 @@ import {
   providers: [
     WeatherService,
     DeezerService,
-    EventsService    
+    EventsService
   ],
   bootstrap: [HomeComponent]
 })

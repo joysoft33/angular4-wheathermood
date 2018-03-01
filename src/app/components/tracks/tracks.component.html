@@ -6,13 +6,13 @@
           <div class="buttons">
             <button class="mdl-button mdl-js-button mdl-button--fab mmdl-button--colored" (click)="cancel()">
               <i class="material-icons">stop</i>
-            </button>        
+            </button>
             <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" (click)="trackNext()">
               <i class="material-icons">skip_next</i>
-            </button>        
+            </button>
             <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--colored" (click)="trackPause()">
               <i class="material-icons">{{pause ? 'play_arrow' : 'pause'}}</i>
-            </button>        
+            </button>
           </div>
           <div class="infos" *ngIf="currentTrack">
             <span>{{currentTrack.artistName}}</span>&nbsp;/&nbsp;
@@ -24,8 +24,7 @@
       <main class="mdl-layout__content">
         <ul class="mdl-list mdl-list__item--three-line">
           <li *ngFor="let t of tracks; let i = index; let last = last; trackBy: trackById" [ngClass]="{active: currentTrack && (currentTrack.id == t.id)}"
-            (mouseenter)="show[i]=true" (mouseleave)="show[i]=false" (click)="trackPlay(i)"
-            class="mdl-list__item">
+            (mouseenter)="show[i]=true" (mouseleave)="show[i]=false" (click)="trackPlay(i)" class="mdl-list__item">
             <div>
               <span class="mdl-list__item-primary-content">{{t.artistName}}</span>
               <span>{{t.title}}</span>

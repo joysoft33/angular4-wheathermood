@@ -10,7 +10,7 @@ import 'rxjs/add/operator/map';
 import { AppEvent, TrackNewEvent, TrackPauseEvent, TrackPlayEvent } from '../events/events.declarations';
 import { Playlist, Track } from './deezer.declarations';
 
-const CHANNEL_URL = 'http://localhost:8080/channel.html';
+const CHANNEL_URL = 'http://localhost:3000/channel.html';
 const APP_ID = '229702';
 const LOGNS = 'DS::';
 

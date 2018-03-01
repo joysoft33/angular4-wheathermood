@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+
+import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -24,7 +26,7 @@ export class WeatherService {
 
     return this.http.get(API_URL + city + "&APPID=" + API_KEY)
 
-      .map((res: Response) => {
+      .map((res: Response): WeatherInfo => {
 
         let body = res.json() || {};
         
@@ -39,16 +41,20 @@ export class WeatherService {
         console.log(LOGNS, city, 'weather is', info.meteo);
         return info;
       })
-      .catch((error: any) => {
+      .catch((error, caught: Observable<WeatherInfo>) => {
 
         let errMsg: string;
 
         if (error instanceof Response) {
           const body = error.json() || '';
-          const err = body.error || JSON.stringify(body);
-          errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-          if (body.data) {
-            errMsg += body.data.message;
+          if (body.message) {
+            errMsg = body.message;
+          } else {
+            const err = body.error || JSON.stringify(body);
+            errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+            if (body.data) {
+              errMsg += body.data.message;
+            }
           }
         } else {
           errMsg = error.message ? error.message : error.toString();

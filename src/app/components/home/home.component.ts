@@ -1,16 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, NgZone, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Subscription } from 'rxjs/Subscription';
 
-import { 
+import {
   EventsService,
   AppEvent,
   MeteoEvent,
   PlayEvent,
   StopEvent,
   ToastEvent,
-  LoadEvent } from '../../services/events';
+  LoadEvent
+} from '../../services/events';
 
 @Component({
   selector: 'home',
@@ -23,6 +24,7 @@ export class HomeComponent {
   loading: boolean = false;
 
   constructor(
+    private zone: NgZone,
     private router: Router,
     private events: EventsService
   ) {
@@ -37,9 +39,7 @@ export class HomeComponent {
   }
 
   onEvent = (event: AppEvent): void => {
-
     console.log('Event:', event.type, event.value);
-
     if (event instanceof MeteoEvent) {
       this.router.navigate(['/playlists', event.value]);
     } else if (event instanceof PlayEvent) {
@@ -57,7 +57,7 @@ export class HomeComponent {
   };
 
   showLoading = (show: boolean): void => {
-    setTimeout(() => this.loading = show, 0);
+    this.zone.run(() => this.loading = show);
   };
 
   showToast = (message: string): void => {
