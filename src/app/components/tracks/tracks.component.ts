@@ -37,33 +37,42 @@ export class TracksComponent implements OnInit, OnDestroy {
     private deezer: DeezerService,
     private events: EventsService
   ) {
+    // Stay informed of player events
+    this.subscription = this.deezer.events$.subscribe((event) => this.onPlayEvent(event));
     this.pause = true;
     this.show = [];
   }
 
   ngOnInit() {
-    // Stay informed of player events
-    this.subscription = this.deezer.events$.subscribe((event) => this.onPlayEvent(event));
+    console.log('Tracks component init');
+    // Save the playlist identifier
+    this.playlistId = +(this.route.snapshot.paramMap.get('id'));
     // Get the requested playlist tracks
     this.events.emit(new LoadEvent(true));
     this.deezer
-      .playlistPlay(+(this.route.snapshot.paramMap.get('id')))
+      .playlistPlay(this.playlistId)
       .first()
-      .subscribe((tracks) => {
+      .subscribe((tracks): void => {
         this.zone.run(() => this.tracks = tracks);
-      }, (err) => {
+      }, (err): void => {
         this.events.emit(new ToastEvent(err));
-      }, () => {
+      }, (): void => {
         this.events.emit(new LoadEvent(false));
       });
   }
 
   ngOnDestroy() {
+    console.log('Tracks component destroy');
     this.subscription.unsubscribe();
+    if (!this.pause) {
+      this.deezer.trackPause();
+    }
   }
 
   cancel = (): void => {
-    this.deezer.trackPause();
+    if (!this.pause) {
+      this.deezer.trackPause();
+    }
     this.events.emit(new StopEvent());
   };
 
@@ -77,6 +86,7 @@ export class TracksComponent implements OnInit, OnDestroy {
   trackPlay = (index: number): void => {
     this.events.emit(new LoadEvent(true));
     this.deezer.playlistPlay(this.playlistId, index)
+      .first()
       .subscribe((data): void => {
         console.log(data);
       }, (err): void => {

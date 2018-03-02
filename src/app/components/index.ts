@@ -1,4 +1,4 @@
-export { HomeComponent } from './home/home.component';
+export { AppComponent } from './app/app.component';
 export { PlaylistsComponent } from './playlists/playlists.component';
 export { TracksComponent } from './tracks/tracks.component';
 export { WeatherComponent } from './weather/weather.component';

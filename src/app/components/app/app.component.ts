@@ -14,11 +14,11 @@ import {
 } from '../../services/events';
 
 @Component({
-  selector: 'home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
 })
-export class HomeComponent {
+export class AppComponent {
 
   subscription: Subscription;
   loading: boolean = false;
@@ -28,10 +28,10 @@ export class HomeComponent {
     private router: Router,
     private events: EventsService
   ) {
+    this.subscription = this.events.events$.subscribe(this.onEvent);
   }
 
   ngOnInit() {
-    this.subscription = this.events.events$.subscribe(this.onEvent);
   }
 
   ngOnDestroy() {
@@ -41,11 +41,11 @@ export class HomeComponent {
   onEvent = (event: AppEvent): void => {
     console.log('Event:', event.type, event.value);
     if (event instanceof MeteoEvent) {
-      this.router.navigate(['/playlists', event.value]);
+      this.router.navigate(['playlists', event.value]);
     } else if (event instanceof PlayEvent) {
-      this.router.navigate(['/tracks', event.value]);
+      this.router.navigate(['tracks', event.value]);
     } else if (event instanceof StopEvent) {
-      this.router.navigate(['/']);
+      this.router.navigate(['']);
     } else if (event instanceof ToastEvent) {
       this.showToast(event.value);
       this.showLoading(false);
@@ -57,8 +57,8 @@ export class HomeComponent {
   };
 
   showLoading = (show: boolean): void => {
-    this.zone.run(() => this.loading = show);
-  };
+    setTimeout(() => this.zone.run(() => this.loading = show));
+  }
 
   showToast = (message: string): void => {
     const snackbarContainer: any = document.querySelector('.mdl-snackbar');
@@ -67,5 +67,5 @@ export class HomeComponent {
         message: message
       });
     }
-  };
+  }
 }

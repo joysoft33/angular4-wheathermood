@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { AsyncSubject } from 'rxjs/AsyncSubject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
-import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/first';
 import 'rxjs/add/operator/map';
 
 import { AppEvent, TrackNewEvent, TrackPauseEvent, TrackPlayEvent } from '../events/events.declarations';
@@ -28,48 +29,48 @@ declare var DZ: any;
 @Injectable()
 export class DeezerService {
 
+  private loaded = new BehaviorSubject<boolean>(false);
   private eventSource = new Subject<AppEvent>();
-  private loaded: boolean = false;
 
   events$ = this.eventSource.asObservable();
 
   constructor() {
+
+    window.dzAsyncInit = () => {
+
+      DZ.init({
+        appId: APP_ID,
+        channelUrl: CHANNEL_URL,
+        player: true
+      });
+
+      DZ.Event.subscribe('player_loaded', () => {
+        console.log(LOGNS, 'Init done');
+        for (let evt of EVENTS) {
+          DZ.Event.subscribe(evt, this.playerNotification);
+        }
+        this.loaded.next(true);
+      });
+    };
+
+    const e = document.createElement('script');
+    e.src = 'https://e-cdns-files.dzcdn.net/js/min/dz.js';
+    e.async = true;
+    document.getElementById('dz-root').appendChild(e);
   }
 
-  /**
-   * Load and initialize the Deezer JS API
-   */
-  initialize = (): Observable<boolean> => {
-    return Observable.create((observer) => {
-      if (!this.loaded) {
-
-        window.dzAsyncInit = () => {
-
-          DZ.init({
-            appId: APP_ID,
-            channelUrl: CHANNEL_URL,
-            player: true
-          });
-
-          DZ.Event.subscribe('player_loaded', () => {
-            console.log(LOGNS, 'Init done');
-            this.loaded = true;
-            for (let evt of EVENTS) {
-              DZ.Event.subscribe(evt, this.playerNotification);
-            }
-            observer.next(true);
-          });
-        };
-
-        const e = document.createElement('script');
-        e.src = 'https://e-cdns-files.dzcdn.net/js/min/dz.js';
-        e.async = true;
-        document.getElementById('dz-root').appendChild(e);
-      } else {
-        observer.next(true);
+  /** 
+   * Execute the supplied callback when DZ API is loaded
+  */
+ whenLoaded(callback: Function) {
+    this.loaded.asObservable().subscribe(function (loaded: boolean) {
+      console.log(LOGNS, `whenLoaded: ${loaded}`);
+      if (loaded) {
+        callback();
+        this._unsubscribe();
       }
     });
-  };
+  }
 
   /**
    * Search for playlists corresponding to the given keyword
@@ -77,7 +78,7 @@ export class DeezerService {
   playlistSearch = (key: string): Observable<Playlist[]> => {
     console.log(LOGNS, `Searching for playlist with ${key}`);
     return Observable.create((observer) => {
-      this.initialize().subscribe((done: boolean) => {
+      this.whenLoaded(() => {
         DZ.api('/search/playlist?q=' + encodeURIComponent(key), (response) => {
           if (response.data) {
             console.log(LOGNS, `${response.data.length} playlists received`);
@@ -100,7 +101,7 @@ export class DeezerService {
   playlistPlay = (id: number, index: number = 0): Observable<Track[]> => {
     console.log(LOGNS, `Playing playlist ${id} / ${index}`);
     return Observable.create((observer) => {
-      this.initialize().subscribe((done: boolean) => {
+      this.whenLoaded(() => {
         DZ.player.playPlaylist(id, index, (response) => {
           if (response.tracks) {
             // Convert the received data into a Track objects list
@@ -120,19 +121,19 @@ export class DeezerService {
    * DZ player commands
    */
   trackNext = (): void => {
-    this.initialize().subscribe((done: boolean) => {
+    this.whenLoaded(() => {
       DZ.player.next();
     });
   };
 
   trackPlay = (): void => {
-    this.initialize().subscribe((done: boolean) => {
+    this.whenLoaded(() => {
       DZ.player.play();
     });
   };
 
   trackPause = (): void => {
-    this.initialize().subscribe((done: boolean) => {
+    this.whenLoaded(() => {
       DZ.player.pause();
     });
   }

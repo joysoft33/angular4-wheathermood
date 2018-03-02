@@ -27,9 +27,7 @@ export class WeatherService {
     return this.http.get(API_URL + city + "&APPID=" + API_KEY)
 
       .map((res: Response): WeatherInfo => {
-
         let body = res.json() || {};
-        
         let info: WeatherInfo = {
           name: body.name,
           temperature: body.main.temp,
@@ -37,14 +35,12 @@ export class WeatherService {
           description: body.weather[0].description,
           icon: `http://openweathermap.org/img/w/${body.weather[0].icon}.png`
         };
-
         console.log(LOGNS, city, 'weather is', info.meteo);
         return info;
       })
+
       .catch((error, caught: Observable<WeatherInfo>) => {
-
         let errMsg: string;
-
         if (error instanceof Response) {
           const body = error.json() || '';
           if (body.message) {
@@ -59,7 +55,6 @@ export class WeatherService {
         } else {
           errMsg = error.message ? error.message : error.toString();
         }
-
         console.error(LOGNS, city, 'weather request error', errMsg);
         return Observable.throw(errMsg);
       });

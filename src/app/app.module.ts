@@ -5,10 +5,10 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AppRoutingModule  } from './app-routing.module';
+import { AppRoutingModule } from './app-routing.module';
 
 import {
-  HomeComponent,
+  AppComponent,
   PlaylistsComponent,
   TracksComponent,
   WeatherComponent,
@@ -24,7 +24,7 @@ import {
 
 @NgModule({
   declarations: [
-    HomeComponent,
+    AppComponent,
     PlaylistsComponent,
     TracksComponent,
     WeatherComponent,
@@ -43,6 +43,6 @@ import {
     DeezerService,
     EventsService
   ],
-  bootstrap: [HomeComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

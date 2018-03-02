@@ -32,33 +32,37 @@ export class PlaylistsComponent implements OnInit, OnDestroy {
     private deezer: DeezerService,
     private events: EventsService
   ) {
+    this.subscription = this.router.events.subscribe(this.onRouterEvent);
   }
 
   ngOnInit() {
-    this.subscription = this.router.events.subscribe((evt: any) => {
-      if (evt instanceof NavigationEnd) {
-        console.log('Router event:', evt);
-        this.events.emit(new LoadEvent(true));
-        // Get the searched keyword from route parameters
-        this.deezer
-          .playlistSearch(this.route.snapshot.paramMap.get('key'))
-          .first()
-          .subscribe((playlists: Playlist[]) => {
-            this.zone.run((): void => {
-              this.playlists = playlists;
-            });
-          }, (err): void => {
-            this.events.emit(new ToastEvent(err))
-          }, (): void => {
-            this.events.emit(new LoadEvent(false));
-          });
-      }
-    });
+    console.log('Playlists component init');
   };
 
   ngOnDestroy() {
+    console.log('Playlists component destroy');
     this.subscription.unsubscribe();
   }
+
+  onRouterEvent = (evt: any) => {
+    console.log('Router event:', evt);
+    if (evt instanceof NavigationEnd) {
+      this.events.emit(new LoadEvent(true));
+      // Get the searched keyword from route parameters
+      this.deezer
+        .playlistSearch(this.route.snapshot.paramMap.get('key'))
+        .first()
+        .subscribe((playlists: Playlist[]) => {
+          this.zone.run((): void => {
+            this.playlists = playlists;
+          });
+        }, (err): void => {
+          this.events.emit(new ToastEvent(err))
+        }, (): void => {
+          this.events.emit(new LoadEvent(false));
+        });
+    }
+  };
 
   trackById = (index, playlist: Playlist): number => {
     return playlist.id;
