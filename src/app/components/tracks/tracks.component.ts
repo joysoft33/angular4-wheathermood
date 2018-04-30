@@ -1,6 +1,6 @@
 import { Component, NgZone, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import 'rxjs/add/operator/first';
 

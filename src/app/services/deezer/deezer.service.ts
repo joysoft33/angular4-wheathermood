@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/first';

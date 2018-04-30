@@ -1,7 +1,7 @@
 import { Component, NgZone, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
 
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/first';
